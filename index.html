@@ -1,1 +1,106 @@
-
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111111">
+  <title>FASHION STYLE | Streetwear</title>
+  <meta name="description" content="Descubre tu estilo. Moda urbana, prendas oversize y nuevas colecciones en Fashion Style.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announcement">NEW DROP — TU ESTILO, TUS REGLAS</div>
+  <header class="header">
+    <a class="logo" href="#inicio">F/S<span>.</span></a>
+    <nav>
+      <a href="#inicio">INICIO</a>
+      <a href="#coleccion">COLECCIÓN</a>
+      <a href="#nosotros">NOSOTROS</a>
+      <a href="#contacto">CONTACTO</a>
+    </nav>
+    <a class="bag" href="#coleccion">EXPLORAR ↗</a>
+  </header>
+  <main>
+    <section class="hero" id="inicio">
+      <img class="hero-image"
+        src="https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1800&q=85"
+        alt="Moda urbana y estilo streetwear">
+      <div class="hero-shade"></div>
+      <div class="hero-content">
+        <p class="eyebrow">NO SIGAS TENDENCIAS. CREA LA TUYA.</p>
+        <h1>YOUR STYLE.<br>YOUR <span>RULES.</span></h1>
+        <p class="hero-description">Piezas que hablan por ti. Una actitud que no necesita presentación.</p>
+        <a class="primary-button" href="#coleccion">DESCUBRIR COLECCIÓN <span>↗</span></a>
+      </div>
+      <div class="hero-bottom"><span>STREETWEAR / BOGOTÁ</span><span>EST. 2026</span></div>
+    </section>
+<section class="intro" id="nosotros">
+  <p class="eyebrow dark">MÁS QUE ROPA. UNA ACTITUD.</p>
+  <h2>VÍSTETE COMO<br>TE <span>SIENTES.</span></h2>
+  <p>Fashion Style nace para quienes encuentran en la ropa una forma de expresión. Combina, experimenta y crea un estilo que sea realmente tuyo.</p>
+</section>
+<section class="collection" id="coleccion">
+  <div class="section-heading">
+    <div><p class="eyebrow dark">ENCUENTRA TU VIBE</p><h2>THE COLLECTION<span>.</span></h2></div>
+    <p>Prendas para todos los días.<br>Actitud para cualquier ocasión.</p>
+  </div>
+  <div class="category-grid">
+    <a class="category-card" href="#productos" data-category="Camisetas">
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="Camisetas urbanas">
+      <span class="category-number">01 / ESSENTIALS</span>
+      <span class="category-name">GRAPHIC TEES ↗</span>
+    </a>
+    <a class="category-card" href="#productos" data-category="Buzos">
+      <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=900&q=85" alt="Buzos y sudaderas">
+      <span class="category-number">02 / COMFORT</span>
+      <span class="category-name">OVERSIZE ↗</span>
+    </a>
+    <a class="category-card" href="#productos" data-category="Pantalones">
+      <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=900&q=85" alt="Jeans de estilo urbano">
+      <span class="category-number">03 / EVERYDAY</span>
+      <span class="category-name">DENIM & CARGO ↗</span>
+    </a>
+  </div>
+</section>
+<section class="products" id="productos">
+  <div class="section-heading">
+    <div><p class="eyebrow dark">SELECCIÓN FASHION STYLE</p><h2>FRESH PICKS<span>.</span></h2></div>
+    <span class="product-count" id="product-count">COLECCIÓN DESTACADA</span>
+  </div>
+  <div class="filters">
+    <button class="filter active" data-filter="Todos">TODOS</button>
+    <button class="filter" data-filter="Camisetas">CAMISETAS</button>
+    <button class="filter" data-filter="Buzos">BUZOS</button>
+    <button class="filter" data-filter="Pantalones">PANTALONES</button>
+  </div>
+  <div class="product-grid" id="product-grid">
+    <p class="loading">Preparando la colección...</p>
+  </div>
+</section>
+<section class="statement">
+  <p class="eyebrow">FASHION IS HOW YOU SAY WHO YOU ARE</p>
+  <h2>BE BOLD.<br>BE <span>YOURSELF.</span></h2>
+  <a href="#coleccion" class="primary-button light-button">ENCUENTRA TU ESTILO ↗</a>
+</section>
+<section class="contact" id="contacto">
+  <div><p class="eyebrow dark">HABLEMOS</p><h2>¿QUÉ TE GUSTARÍA<br>VER EN LA <span>TIENDA?</span></h2><p>Cuéntanos qué prendas, estilos o colecciones quisieras encontrar.</p></div>
+  <form id="suggestion-form">
+    <label for="customer-name">TU NOMBRE</label>
+    <input id="customer-name" name="name" type="text" placeholder="¿Cómo te llamas?" required>
+    <label for="customer-email">TU CORREO</label>
+    <input id="customer-email" name="email" type="email" placeholder="correo@ejemplo.com" required>
+    <label for="suggestion-message">TU IDEA</label>
+    <textarea id="suggestion-message" name="message" placeholder="Me gustaría encontrar..." required></textarea>
+    <label class="consent"><input type="checkbox" required> Acepto que mis datos se utilicen para responder a mi sugerencia.</label>
+    <button class="primary-button form-button" type="submit">ENVIAR SUGERENCIA ↗</button>
+    <p id="form-status" role="status"></p>
+  </form>
+</section>
+  </main>
+  <footer><a class="logo footer-logo" href="#inicio">F/S<span>.</span></a><p>NO ES SOLO LO QUE VISTES. ES CÓMO LO LLEVAS.</p><span>© 2026 FASHION STYLE</span></footer>
+  <script src="script.js" defer></script>
+</body>
+</html>
