@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dona ropa y ayuda a transformar historias con Fashion Style.">
+  <title>Donaciones | Fashion Style</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="container navbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">F/S</span>
+      Fashion Style
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="campanas.html">Campañas</a>
+      <a href="ia.html">Asistente IA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <img
+      src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=1800&q=85"
+      alt="Prendas de vestir preparadas para tener una nueva vida"
+    >
+    <div class="hero-content">
+      <span class="eyebrow">Moda con propósito</span>
+      <h1>Una prenda puede cambiar <em>una historia.</em></h1>
+      <p>Comparte la ropa que ya no necesitas y ayúdanos a impulsar una forma de vestir más consciente y solidaria.</p>
+      <a class="btn" href="#formulario-donacion">Quiero donar</a>
+    </div>
+  </section>
+
+  <section id="formulario-donacion">
+    <div class="section-container">
+      <div>
+        <span class="section-label">Dona con amor</span>
+        <h2>Tu ropa merece una nueva oportunidad.</h2>
+        <p>Registra los datos de las prendas que deseas donar. Te contactaremos cuando el sistema tenga habilitado el proceso real de recepción.</p>
+        <p><strong>Antes de donar:</strong> asegúrate de que las prendas estén limpias y en condiciones adecuadas para su reutilización.</p>
+      </div>
+
+      <form id="donation-form">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" type="text" autocomplete="name" required>
+
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" name="correo" type="email" autocomplete="email" required>
+
+        <label for="categoria">Tipo de prenda</label>
+        <select id="categoria" name="categoria" required>
+          <option value="">Selecciona una categoría</option>
+          <option value="blusas">Blusas y camisas</option>
+          <option value="pantalones">Pantalones</option>
+          <option value="vestidos">Vestidos y faldas</option>
+          <option value="chaquetas">Chaquetas y abrigos</option>
+          <option value="calzado">Calzado</option>
+          <option value="accesorios">Accesorios</option>
+          <option value="otras">Otras prendas</option>
+        </select>
+
+        <label for="talla">Talla</label>
+        <select id="talla" name="talla" required>
+          <option value="">Selecciona una talla</option>
+          <option value="XS">XS</option>
+          <option value="S">S</option>
+          <option value="M">M</option>
+          <option value="L">L</option>
+          <option value="XL">XL</option>
+          <option value="unica">Talla única</option>
+          <option value="varias">Varias tallas</option>
+        </select>
+
+        <label for="estado">Estado de la prenda</label>
+        <select id="estado" name="estado" required>
+          <option value="">Selecciona el estado</option>
+          <option value="excelente">Excelente</option>
+          <option value="bueno">Bueno</option>
+          <option value="reparacion">Necesita reparación</option>
+        </select>
+
+        <label for="ciudad">Ciudad</label>
+        <input id="ciudad" name="ciudad" type="text" autocomplete="address-level2" required>
+
+        <label for="descripcion">Descripción adicional (opcional)</label>
+        <textarea id="descripcion" name="descripcion" placeholder="Cuéntanos un poco más sobre las prendas..."></textarea>
+
+        <label>
+          <input type="checkbox" name="consentimiento" required>
+          Acepto que mis datos sean utilizados para gestionar esta solicitud.
+        </label>
+
+        <button type="submit">Registrar mi intención de donar</button>
+
+        <p id="donation-status" role="status" aria-live="polite"></p>
+
+        <p class="form-note">Por ahora, el formulario solo valida la información en el navegador. El registro real requiere conectar el servidor y la base de datos.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h3>Fashion Style</h3>
+      <p>La moda también puede transformar vidas.</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="campanas.html">Campañas</a>
+      <a href="ia.html">Asistente IA</a>
+    </div>
+  </div>
+  <p class="copyright">© 2026 Fashion Style — Moda que transforma.</p>
+</footer>
+
+</body>
+</html>
