@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Conoce las iniciativas de Fashion Style para impulsar la moda sostenible.">
+  <title>Campañas | Fashion Style</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="container navbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">F/S</span>
+      Fashion Style
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="donaciones.html">Donaciones</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="ia.html">Asistente IA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <img
+      src="https://images.unsplash.com/photo-1473181488821-2d23949a045a?auto=format&fit=crop&w=1800&q=85"
+      alt="Prendas de vestir organizadas para una iniciativa de moda"
+    >
+    <div class="hero-content">
+      <span class="eyebrow">Pequeñas acciones, nuevas oportunidades</span>
+      <h1>El cambio se construye <em>en comunidad.</em></h1>
+      <p>Descubre iniciativas que promueven la reutilización de prendas, el consumo consciente y una moda con propósito.</p>
+      <a class="btn" href="#iniciativas">Explorar iniciativas</a>
+    </div>
+  </section>
+
+  <section id="iniciativas">
+    <div class="section-container">
+      <div class="section-heading">
+        <span class="section-label">Moda que conecta</span>
+        <h2>Cada prenda puede comenzar una nueva historia.</h2>
+        <p>Este espacio reunirá campañas e iniciativas para que más personas puedan participar en acciones de moda sostenible.</p>
+      </div>
+
+      <div class="campaigns-grid">
+        <article class="campaign-card">
+          <img
+            src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=900&q=80"
+            alt="Prendas que pueden reutilizarse"
+            loading="lazy"
+          >
+          <div class="card-content">
+            <span class="card-tag">Iniciativa comunitaria</span>
+            <h3>Una segunda oportunidad</h3>
+            <p>Invita a revisar tu armario y separar las prendas limpias y en buen estado que ya no utilizas.</p>
+            <a class="btn btn-outline" href="donaciones.html">Preparar una donación</a>
+          </div>
+        </article>
+
+        <article class="campaign-card">
+          <img
+            src="https://images.unsplash.com/photo-1452860606245-08befc0ff44b?auto=format&fit=crop&w=900&q=80"
+            alt="Materiales para reparar y transformar ropa"
+            loading="lazy"
+          >
+          <div class="card-content">
+            <span class="card-tag">Aprendizaje sostenible</span>
+            <h3>Transforma tu ropa</h3>
+            <p>Explora ideas para reparar, personalizar y aprovechar prendas antes de decidir desecharlas.</p>
+            <a class="btn btn-outline" href="sostenibilidad.html">Descubrir consejos</a>
+          </div>
+        </article>
+
+        <article class="campaign-card">
+          <img
+            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=80"
+            alt="Prendas de diferentes estilos"
+            loading="lazy"
+          >
+          <div class="card-content">
+            <span class="card-tag">Participación ciudadana</span>
+            <h3>Conecta con la comunidad</h3>
+            <p>Propón una jornada de intercambio o una iniciativa local de reutilización de prendas.</p>
+            <a class="btn btn-outline" href="#proponer">Proponer una iniciativa</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="campaigns-note">
+        Estas tarjetas presentan ideas de participación, no campañas activas confirmadas. Las fechas, los cupos y los puntos de recolección se publicarán cuando hayan sido verificados.
+      </p>
+    </div>
+  </section>
+
+  <section id="proponer">
+    <div class="section-container">
+      <div>
+        <span class="section-label">Tu idea importa</span>
+        <h2>¿Te gustaría impulsar una iniciativa?</h2>
+        <p>Cuéntanos tu propuesta para promover la reutilización de ropa en tu comunidad. Por ahora, el formulario funciona como demostración y no envía mensajes.</p>
+      </div>
+
+      <form id="contact-form">
+        <label for="contact-name">Nombre</label>
+        <input id="contact-name" name="nombre" type="text" required>
+
+        <label for="contact-email">Correo electrónico</label>
+        <input id="contact-email" name="correo" type="email" required>
+
+        <label for="contact-message">Describe tu iniciativa</label>
+        <textarea id="contact-message" name="mensaje" placeholder="¿Qué te gustaría organizar y en qué ciudad?" required></textarea>
+
+        <button type="submit">Presentar mi idea</button>
+        <p id="contact-status" role="status" aria-live="polite"></p>
+        <p class="form-note">La propuesta no se guarda ni se envía hasta conectar el backend.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h3>Fashion Style</h3>
+      <p>La moda también puede transformar vidas.</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="donaciones.html">Donaciones</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="ia.html">Asistente IA</a>
+    </div>
+  </div>
+  <p class="copyright">© 2026 Fashion Style — Moda que transforma.</p>
+</footer>
+
+</body>
+</html>
