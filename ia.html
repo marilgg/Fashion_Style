@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Descubre nuevas formas de reutilizar tu ropa con el asistente de Fashion Style.">
+  <title>Asistente IA | Fashion Style</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="ia.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="container navbar">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">F/S</span>
+      Fashion Style
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="index.html">Inicio</a>
+      <a href="donaciones.html">Donaciones</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="campanas.html">Campañas</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <img
+      src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=85"
+      alt="Prendas y combinaciones de moda"
+    >
+    <div class="hero-content">
+      <span class="eyebrow">Tecnología con propósito</span>
+      <h1>Ideas nuevas para una moda <em>más consciente.</em></h1>
+      <p>Explora posibilidades para combinar, reparar y reutilizar las prendas que ya tienes.</p>
+      <a class="btn" href="#asistente">Probar el asistente</a>
+    </div>
+  </section>
+
+  <section id="asistente">
+    <div class="section-container">
+      <div class="section-heading">
+        <span class="section-label">Fashion Style Intelligence</span>
+        <h2>Tu creatividad, con una nueva perspectiva.</h2>
+        <p>Cuéntanos qué prenda quieres transformar y descubre ideas sostenibles.</p>
+      </div>
+
+      <div class="ai-panel">
+        <div class="ai-header">
+          <div class="ai-avatar">FS</div>
+          <div>
+            <h3>Asistente de moda</h3>
+            <p>Asesor de reutilización y estilo</p>
+          </div>
+          <span class="ai-status">Modo demostración</span>
+        </div>
+
+        <div id="chat-messages" class="chat-messages" aria-live="polite">
+          <div class="chat-bubble assistant-message">
+            ¡Hola! 💗 Soy el asistente de Fashion Style. Puedo ayudarte a explorar formas de reutilizar ropa, reparar prendas y crear combinaciones con lo que ya tienes.
+
+            <br><br>¿Qué prenda te gustaría transformar?
+          </div>
+        </div>
+
+        <form id="ai-form" class="ai-form">
+          <label for="ai-question">Tu pregunta</label>
+          <textarea
+            id="ai-question"
+            name="pregunta"
+            rows="3"
+            maxlength="500"
+            placeholder="Ej.: ¿Cómo puedo darle una nueva vida a unos jeans viejos?"
+            required
+          ></textarea>
+          <button type="submit">Consultar asistente ↗</button>
+        </form>
+
+        <p id="ai-status" class="form-note" role="status" aria-live="polite">
+          Esta versión es una demostración local. La IA real se conectará mediante el backend.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ideas">
+    <div class="section-container">
+      <div class="section-heading">
+        <span class="section-label">Inspírate</span>
+        <h2>¿Por dónde quieres empezar?</h2>
+        <p>Elige una idea y úsala como punto de partida para tu consulta.</p>
+      </div>
+
+      <div class="tips-grid">
+        <article class="tip-card">
+          <div class="card-content">
+            <span class="card-tag">01 · Reutilizar</span>
+            <h3>Nuevas combinaciones</h3>
+            <p>Encuentra formas diferentes de combinar una prenda que ya tienes.</p>
+            <button class="btn btn-outline suggestion-btn" type="button" data-question="Dame tres ideas para combinar una camisa blanca que ya tengo.">Explorar ideas</button>
+          </div>
+        </article>
+
+        <article class="tip-card">
+          <div class="card-content">
+            <span class="card-tag">02 · Reparar</span>
+            <h3>Segunda oportunidad</h3>
+            <p>Busca opciones para cuidar o reparar una prenda que tiene algún daño.</p>
+            <button class="btn btn-outline suggestion-btn" type="button" data-question="¿Qué opciones tengo para aprovechar una prenda con una costura dañada?">Explorar ideas</button>
+          </div>
+        </article>
+
+        <article class="tip-card">
+          <div class="card-content">
+            <span class="card-tag">03 · Transformar</span>
+            <h3>Creatividad circular</h3>
+            <p>Piensa en nuevos usos para la ropa que ya no utilizas.</p>
+            <button class="btn btn-outline suggestion-btn" type="button" data-question="Dame ideas sostenibles para reutilizar unos jeans que ya no uso.">Explorar ideas</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h3>Fashion Style</h3>
+      <p>La moda también puede transformar vidas.</p>
+    </div>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="donaciones.html">Donaciones</a>
+      <a href="sostenibilidad.html">Sostenibilidad</a>
+      <a href="campanas.html">Campañas</a>
+    </div>
+  </div>
+  <p class="copyright">© 2026 Fashion Style — Moda que transforma.</p>
+</footer>
+
+</body>
+</html>
