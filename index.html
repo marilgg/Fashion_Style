@@ -1,140 +1,19 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Fashion Style: dona ropa, descubre la moda sostenible y transforma tu comunidad.">
-  <title>Fashion Style | Moda que transforma</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-</head>
-<body>
-  <header class="header">
-    <a class="logo" href="#inicio">F<span>/</span>S<span class="logo-dot">.</span></a>
-    <nav class="nav">
-      <a href="#inicio">Inicio</a>
-      <a href="#proposito">Nuestro propósito</a>
-      <a href="#donar">Donar ropa</a>
-      <a href="#sostenibilidad">Sostenibilidad</a>
-      <a href="#campanas">Campañas</a>
-    </nav>
-    <a class="header-button" href="#donar">Quiero ayudar ↗</a>
-  </header>
-
-  <main>
-    <section class="hero" id="inicio">
-      <div class="hero-content">
-        <span class="eyebrow"><span class="dot"></span> MODA CON PROPÓSITO</span>
-        <h1>TU ROPA.<br>TU HISTORIA.<br><span>UN NUEVO</span><br><span>COMIENZO.</span></h1>
-        <p>Lo que ya no necesitas puede convertirse en una nueva oportunidad para alguien más. Transformemos juntos la manera de vivir la moda.</p>
-        <div class="hero-actions">
-          <a class="button button-green" href="#donar">Donar una prenda ↗</a>
-          <a class="button button-outline" href="#proposito">Conoce nuestra misión</a>
-        </div>
-        <div class="hero-note"><span>01 / 03</span> UNA PRENDA PUEDE CAMBIAR UNA HISTORIA.</div>
-      </div>
-      <div class="hero-image">
-        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1100&q=85" alt="Moda urbana y estilo personal">
-        <div class="image-label"><span>FASHION WITH PURPOSE</span><strong>Wear it. Share it. Renew it.</strong></div>
-        <div class="image-sticker">GIVE<br>IT A<br>SECOND<br>LIFE <span>↗</span></div>
-      </div>
-      <div class="hero-bottom"><span>BOGOTÁ, COLOMBIA</span><span>EST. 2026</span><span>IMPACTO QUE SE COMPARTE ↘</span></div>
-    </section>
-
-    <section class="purpose section" id="proposito">
-      <div class="section-label">01 — NUESTRA MISIÓN</div>
-      <div class="purpose-content">
-        <h2>LA MODA SE VE<br>MEJOR CUANDO<br><span>HACE EL BIEN.</span></h2>
-        <div class="purpose-text">
-          <p>Fashion Style nace para darle una segunda oportunidad a la ropa y acercar a las personas a una moda más consciente. Queremos conectar las donaciones con iniciativas sociales y enseñar que reutilizar también es una forma de transformar.</p>
-          <a class="text-link" href="#donar">SÉ PARTE DEL CAMBIO ↗</a>
-        </div>
-      </div>
-      <div class="values">
-        <article><span>01</span><h3>COMPARTIR</h3><p>Facilitar la donación de prendas en buen estado.</p></article>
-        <article><span>02</span><h3>REUTILIZAR</h3><p>Prolongar la vida de la ropa con nuevas ideas.</p></article>
-        <article><span>03</span><h3>TRANSFORMAR</h3><p>Promover hábitos que cuiden a las personas y al planeta.</p></article>
-      </div>
-    </section>
-
-    <section class="donate section" id="donar">
-      <div class="section-label">02 — COMIENZA AQUÍ</div>
-      <div class="section-heading">
-        <h2>ESA PRENDA<br>PUEDE <span>AYUDAR.</span></h2>
-        <p>¿Tienes ropa limpia y en buen estado que ya no usas? Regístrala para iniciar el proceso de donación.</p>
-      </div>
-      <form class="donation-form" id="donation-form">
-        <div class="form-title"><span>FORMULARIO DE DONACIÓN</span><span>01 / REGISTRO</span></div>
-        <div class="form-grid">
-          <label>Tu nombre<input type="text" name="nombre" placeholder="¿Cómo te llamas?" required maxlength="80"></label>
-          <label>Correo electrónico<input type="email" name="correo" placeholder="tu@correo.com" required maxlength="120"></label>
-          <label>Tipo de prenda
-            <select name="categoria" required>
-              <option value="">Selecciona una categoría</option>
-              <option>Camisetas y camisas</option><option>Pantalones y jeans</option>
-              <option>Buzos y chaquetas</option><option>Vestidos y faldas</option>
-              <option>Zapatos</option><option>Otros accesorios</option>
-            </select>
-          </label>
-          <label>Talla aproximada
-            <select name="talla" required>
-              <option value="">Selecciona una talla</option>
-              <option>XS</option><option>S</option><option>M</option><option>L</option>
-              <option>XL o más</option><option>Talla única</option><option>No aplica</option>
-            </select>
-          </label>
-          <label>Estado de la prenda
-            <select name="estado" required>
-              <option value="">Selecciona el estado</option>
-              <option>Como nueva</option><option>Buen estado</option><option>Necesita reparación</option>
-            </select>
-          </label>
-          <label>Ciudad<input type="text" name="ciudad" placeholder="Ej. Bogotá" required maxlength="80"></label>
-          <label class="full">Cuéntanos un poco más<textarea name="descripcion" placeholder="Cantidad de prendas y detalles (opcional)" rows="3" maxlength="500"></textarea></label>
-        </div>
-        <label class="consent"><input type="checkbox" name="consentimiento" required> Acepto que mis datos se utilicen para gestionar mi solicitud de donación.</label>
-        <button class="button button-green submit-button" type="submit">Registrar mi interés en donar ↗</button>
-        <p class="form-status" id="donation-status" role="status" aria-live="polite"></p>
-        <p class="form-disclaimer">Este formulario es una demostración inicial. El registro real y la coordinación de entregas estarán disponibles cuando conectemos el servidor.</p>
-      </form>
-    </section>
-
-    <section class="sustainability section" id="sostenibilidad">
-      <div class="section-label">03 — CAMBIA TUS HÁBITOS</div>
-      <div class="section-heading">
-        <h2>VISTE DIFERENTE.<br>PIENSA <span>CONSCIENTE.</span></h2>
-        <p>Pequeñas decisiones pueden prolongar la vida de tus prendas.</p>
-      </div>
-      <div class="tips-grid">
-        <article class="tip-card"><div class="tip-number">TIP 01 / CUIDAR</div><img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=700&q=80" alt="Prendas de vestir"><div class="tip-body"><h3>Cuida lo que tienes.</h3><p>Lava tus prendas según sus indicaciones, repáralas cuando sea posible y guárdalas adecuadamente.</p></div></article>
-        <article class="tip-card"><div class="tip-number">TIP 02 / REUTILIZAR</div><img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&w=700&q=80" alt="Inspiración de moda"><div class="tip-body"><h3>Imagina algo nuevo.</h3><p>Combina de otra forma, personaliza una prenda o transforma una pieza que ya no utilizas.</p></div></article>
-        <article class="tip-card"><div class="tip-number">TIP 03 / COMPARTIR</div><img src="https://images.unsplash.com/photo-1475180098004-ca77a66827be?auto=format&fit=crop&w=700&q=80" alt="Ropa y accesorios"><div class="tip-body"><h3>Comparte con sentido.</h3><p>Dona prendas limpias y utilizables. Antes de entregarlas, confirma qué recibe cada organización.</p></div></article>
-      </div>
-    </section>
-
-    <section class="campaigns section" id="campanas">
-      <div class="section-label">04 — JUNTOS HACEMOS MÁS</div>
-      <div class="campaign-panel">
-        <div><span class="eyebrow">COMUNIDAD FASHION STYLE</span><h2>EL CAMBIO<br>EMPIEZA <span>CONTIGO.</span></h2><p>Queremos impulsar jornadas de recolección y colaborar con organizaciones que reciban donaciones textiles.</p><a class="button button-green" href="#contacto">Quiero participar ↗</a></div>
-        <div class="campaign-side"><span class="campaign-symbol">↗</span><p>PRÓXIMO OBJETIVO</p><h3>Conectar personas, prendas y oportunidades.</h3><small>Las campañas y los puntos de entrega se publicarán cuando estén confirmados.</small></div>
-      </div>
-    </section>
-
-    <section class="contact section" id="contacto">
-      <div class="section-label">05 — HABLEMOS</div>
-      <div class="contact-content"><h2>¿TIENES UNA<br><span>IDEA?</span></h2><p>¿Conoces una organización, quieres proponer una campaña o tienes una idea sostenible? Nos encantaría conocerla.</p>
-      <form id="contact-form" class="contact-form"><label>Tu nombre<input name="nombre" required maxlength="80" placeholder="Tu nombre"></label><label>Tu correo<input name="correo" type="email" required maxlength="120" placeholder="tu@correo.com"></label><label>Tu mensaje<textarea name="mensaje" required rows="4" maxlength="1000" placeholder="Escribe tu idea aquí..."></textarea></label><button class="button button-green" type="submit">Enviar propuesta ↗</button><p id="contact-status" class="form-status" role="status" aria-live="polite"></p><p class="form-disclaimer">El envío real se habilitará al conectar el servidor.</p></form></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <a class="logo" href="#inicio">F<span>/</span>S<span class="logo-dot">.</span></a>
-    <p>La moda cambia. El impacto permanece.</p>
-    <div><a href="#proposito">Nuestra misión</a><a href="#donar">Donaciones</a><a href="#sostenibilidad">Sostenibilidad</a></div>
-    <small>© 2026 Fashion Style · Moda con propósito.</small>
-  </footer>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Fashion Style: descubre una nueva forma de reutilizar, compartir y transformar la moda."
+    />
+    <meta name="theme-color" content="#e9dcf2" />
+    <title>Fashion Style | Wear the Change</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
