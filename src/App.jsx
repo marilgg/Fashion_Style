@@ -109,7 +109,7 @@ function App() {
       </header>
 
       <main>
-        
+        <section className="intro-section">
           <div className="section-kicker">UNA NUEVA FORMA DE MIRAR TU ARMARIO</div>
           <h2>
             No necesitas más ropa.
