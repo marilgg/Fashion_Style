@@ -109,80 +109,7 @@ function App() {
       </header>
 
       <main>
-        <section className="hero" id="inicio">
-          <div className="hero-orb hero-orb-one" />
-          <div className="hero-orb hero-orb-two" />
-
-          <div className="hero-copy">
-            <span className="eyebrow">
-              <Sprout size={16} /> VISTE EL CAMBIO
-            </span>
-
-            <h1>
-              Tu estilo.
-              <br />
-              <span>Un futuro</span>
-              <br />
-              más consciente.
-            </h1>
-
-            <p>
-              La moda puede expresar quién eres sin dejar de cuidar
-              el planeta. Descubre cómo transformar tu manera de vestir,
-              una decisión a la vez.
-            </p>
-
-            <div className="hero-actions">
-              <button className="button-primary" onClick={() => goTo("sostenibilidad")}>
-                Descubrir cómo <ArrowRight size={17} />
-              </button>
-              <button className="button-secondary" onClick={() => goTo("donaciones")}>
-                Dar una segunda oportunidad
-              </button>
-            </div>
-
-            <div className="hero-note">
-              <span className="note-icon"><Leaf size={17} /></span>
-              <span>Menos desperdicio. Más creatividad. Más vida.</span>
-            </div>
-          </div>
-
-          <div className="hero-art" aria-label="Ilustración de moda sostenible">
-            <div className="art-ring" />
-            <div className="art-card art-card-back">
-              <span>RETHINK</span>
-              <Recycle size={30} />
-            </div>
-            <div className="fashion-figure">
-              <div className="figure-head" />
-              <div className="figure-hair" />
-              <div className="figure-neck" />
-              <div className="figure-body">
-                <div className="figure-shirt" />
-                <div className="figure-jacket" />
-              </div>
-              <div className="figure-skirt" />
-              <div className="figure-leg figure-leg-one" />
-              <div className="figure-leg figure-leg-two" />
-              <div className="figure-bag"><Leaf size={23} /></div>
-            </div>
-            <div className="art-card art-card-front">
-              <Leaf size={20} />
-              <span>STYLE WITH PURPOSE</span>
-              <strong>01 / 03</strong>
-            </div>
-            <span className="art-star star-one">✳</span>
-            <span className="art-star star-two">✳</span>
-          </div>
-
-          <div className="hero-bottom">
-            <span>MODA CIRCULAR</span>
-            <span>CONSUMO RESPONSABLE</span>
-            <span>IMPACTO POSITIVO</span>
-          </div>
-        </section>
-
-        <section className="intro-section">
+        
           <div className="section-kicker">UNA NUEVA FORMA DE MIRAR TU ARMARIO</div>
           <h2>
             No necesitas más ropa.
@@ -196,6 +123,107 @@ function App() {
           </p>
         </section>
 
+<section className="hero hero-editorial" id="inicio">
+  <div className="hero-editorial-inner">
+    <div className="hero-copy hero-editorial-copy">
+      <div className="hero-editorial-kicker">
+        <span className="hero-kicker-dot"></span>
+        MODA CONSCIENTE · UNA NUEVA HISTORIA
+      </div>
+
+      <h1>
+        Viste lo que eres.
+        <span>Cuida lo que viene.</span>
+      </h1>
+
+      <p>
+        Tu estilo puede marcar la diferencia. Descubre nuevas formas
+        de reutilizar, compartir y transformar la moda en algo
+        positivo para el planeta.
+      </p>
+
+      <div className="hero-actions">
+        <button
+          className="button-primary"
+          onClick={() => goTo("sostenibilidad")}
+        >
+          Explorar el cambio <ArrowRight size={17} />
+        </button>
+
+        <button
+          className="button-secondary"
+          onClick={() => goTo("donaciones")}
+        >
+          Quiero donar
+        </button>
+      </div>
+
+      <div className="hero-mini-stats">
+        <div>
+          <strong>01</strong>
+          <span>REUTILIZA</span>
+        </div>
+        <div>
+          <strong>02</strong>
+          <span>REINVENTA</span>
+        </div>
+        <div>
+          <strong>03</strong>
+          <span>TRANSFORMA</span>
+        </div>
+      </div>
+    </div>
+
+    <div className="hero-editorial-art">
+      <div className="editorial-orbit"></div>
+
+      <div className="editorial-poster">
+        <div className="poster-top">
+          <span>FASHION STYLE / EST. 2026</span>
+          <span>01 — 03</span>
+        </div>
+
+        <div className="poster-title">
+          <span>RE</span>
+          <span className="poster-title-accent">IMAGINA.</span>
+        </div>
+
+        <div className="poster-icon-wrap">
+          <Recycle size={100} strokeWidth={1} />
+        </div>
+
+        <div className="poster-swatch-row">
+          <span className="swatch swatch-one"></span>
+          <span className="swatch swatch-two"></span>
+          <span className="swatch swatch-three"></span>
+          <span className="swatch swatch-four"></span>
+          <span className="swatch-caption">EVERY THREAD HAS A STORY</span>
+        </div>
+
+        <div className="poster-footer">
+          <span>WEAR THE CHANGE</span>
+          <span>MODA CIRCULAR</span>
+        </div>
+      </div>
+
+      <div className="editorial-float editorial-float-one">
+        <Leaf size={19} />
+        <span>SEGUNDA VIDA</span>
+      </div>
+
+      <div className="editorial-float editorial-float-two">
+        <Sparkles size={18} />
+        <span>ESTILO CON PROPÓSITO</span>
+      </div>
+    </div>
+  </div>
+
+  <div className="hero-editorial-bottom">
+    <span>MODA CIRCULAR</span>
+    <span>CONSUMO RESPONSABLE</span>
+    <span>UN FUTURO MÁS CONSCIENTE</span>
+  </div>
+</section>
         <section className="features-section" id="sostenibilidad">
           <div className="section-heading">
             <div>
