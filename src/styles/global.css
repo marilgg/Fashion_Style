@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root {
@@ -1022,5 +1021,336 @@ button {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+}
+
+/* ==========================================
+   FASHION STYLE — VISUAL REDESIGN
+   Capa de mejoras visuales
+========================================== */
+
+:root {
+  --wine: #713d61;
+  --wine-dark: #321d35;
+  --lilac: #eadcf5;
+  --lilac-dark: #c7a7df;
+  --cream: #fffaf5;
+  --muted: #786a7b;
+  --line: rgba(75, 42, 76, 0.14);
+}
+
+/* Fondo general */
+body {
+  background: #f5edf7;
+}
+
+.site-shell {
+  background:
+    radial-gradient(circle at 5% 10%, rgba(226, 205, 241, .28), transparent 28%),
+    var(--cream);
+}
+
+/* Barra superior */
+.announcement {
+  background: linear-gradient(90deg, #321d35, #704366, #321d35);
+  letter-spacing: .19em;
+}
+
+/* Navegación */
+.site-header {
+  padding-top: 19px;
+  padding-bottom: 19px;
+  background: rgba(255, 250, 245, .88);
+  box-shadow: 0 8px 30px rgba(58, 34, 58, .045);
+}
+
+.brand-mark {
+  background: linear-gradient(145deg, #f0e3f7, #d8c0e9);
+  box-shadow: 0 5px 16px rgba(100, 60, 112, .12);
+}
+
+.navigation button {
+  transition: all .25s ease;
+}
+
+.navigation button:hover {
+  color: #a06bb5;
+  transform: translateY(-2px);
+}
+
+.navigation .nav-cta {
+  background: linear-gradient(120deg, #754568, #49304f);
+  box-shadow: 0 7px 18px rgba(67, 38, 67, .18);
+}
+
+/* Portada */
+.hero {
+  min-height: 710px;
+  background:
+    radial-gradient(ellipse at 78% 18%, rgba(255,255,255,.95), transparent 27%),
+    radial-gradient(ellipse at 12% 85%, rgba(255,255,255,.65), transparent 30%),
+    linear-gradient(125deg, #f0e4f7 0%, #dfc9ee 48%, #cbb1df 100%);
+}
+
+.hero::before {
+  opacity: .2;
+  background-size: 13px 13px;
+}
+
+.hero h1 {
+  text-shadow: 0 5px 25px rgba(72, 43, 75, .06);
+}
+
+.hero h1 span {
+  color: #9869ae;
+}
+
+.hero-copy > p {
+  color: #5e4c64;
+  font-size: 1.04rem;
+}
+
+.eyebrow {
+  border-color: rgba(113, 61, 97, .2);
+  background: rgba(255,255,255,.62);
+  box-shadow: 0 5px 20px rgba(85, 50, 88, .05);
+}
+
+/* Ilustración principal */
+.hero-art {
+  border: 1px solid rgba(255,255,255,.5);
+  border-radius: 48% 52% 43% 57%;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,255,255,.72), transparent 58%),
+    linear-gradient(145deg, rgba(255,255,255,.22), rgba(194,160,216,.18));
+}
+
+.art-ring {
+  border-color: rgba(96, 54, 79, .23);
+  box-shadow:
+    0 0 0 18px rgba(255,255,255,.2),
+    0 0 0 42px rgba(255,255,255,.12),
+    0 0 0 75px rgba(255,255,255,.07);
+}
+
+.art-card {
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(64,36,59,.15);
+}
+
+.art-card-back {
+  transform: rotate(4deg);
+}
+
+.art-card-front {
+  transform: rotate(-3deg);
+}
+
+/* Botones */
+.button-primary {
+  background: linear-gradient(120deg, #815174, #492c4d);
+  box-shadow: 0 9px 23px rgba(71, 41, 73, .2);
+}
+
+.button-primary:hover {
+  background: linear-gradient(120deg, #96638b, #59365d);
+  transform: translateY(-3px);
+  box-shadow: 0 13px 28px rgba(71, 41, 73, .23);
+}
+
+.button-secondary {
+  border-color: rgba(76, 45, 79, .25);
+  background: rgba(255,255,255,.58);
+}
+
+.button-light {
+  border-radius: 8px;
+}
+
+/* Secciones */
+.intro-section {
+  position: relative;
+  padding-top: 115px;
+  padding-bottom: 115px;
+}
+
+.intro-section h2,
+.section-heading h2,
+.campaign-section h2 {
+  color: #38213c;
+}
+
+.intro-section > p {
+  max-width: 700px;
+}
+
+/* Tarjetas */
+.features-section {
+  position: relative;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255,255,255,.75), transparent 30%),
+    linear-gradient(140deg, #f2e9f5, #e9dcf0);
+}
+
+.feature-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 315px;
+  padding: 32px;
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 17px;
+  background: linear-gradient(145deg, #fffdfc, #fdf7ff);
+  box-shadow: 0 9px 25px rgba(71, 42, 75, .055);
+}
+
+.feature-card::before {
+  position: absolute;
+  top: -55px;
+  right: -55px;
+  width: 135px;
+  height: 135px;
+  border-radius: 50%;
+  background: rgba(225, 205, 239, .28);
+  content: "";
+  transition: transform .35s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-9px);
+  box-shadow: 0 22px 45px rgba(71, 42, 75, .12);
+}
+
+.feature-card:hover::before {
+  transform: scale(1.5);
+}
+
+.feature-icon {
+  position: relative;
+  z-index: 1;
+  width: 55px;
+  height: 55px;
+  border: 1px solid rgba(113, 61, 97, .08);
+  background: linear-gradient(145deg, #f0e3f8, #d9c1eb);
+  box-shadow: 0 7px 17px rgba(89, 54, 104, .1);
+}
+
+.feature-card h3 {
+  position: relative;
+  z-index: 1;
+  font-size: 1.55rem;
+}
+
+.feature-card p {
+  position: relative;
+  z-index: 1;
+}
+
+/* Donaciones */
+.donation-banner {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.13);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(173, 126, 177, .3), transparent 35%),
+    linear-gradient(115deg, #321d35, #704566);
+  box-shadow: 0 20px 45px rgba(57, 31, 58, .17);
+}
+
+.donation-banner h2 {
+  line-height: 1.2;
+}
+
+.banner-icon {
+  background: rgba(255,255,255,.07);
+}
+
+/* Asistente IA */
+.ai-banner {
+  border: 1px solid rgba(188, 157, 207, .45);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,.95), transparent 30%),
+    linear-gradient(120deg, #f0e3f7, #e3d0ee, #f8eff8);
+  box-shadow: 0 15px 35px rgba(83, 49, 87, .07);
+}
+
+.ai-decoration {
+  background: linear-gradient(145deg, #e8d4f2, #c7a5dc);
+  box-shadow: 0 8px 22px rgba(98, 62, 111, .13);
+}
+
+/* Campañas */
+.campaign-section {
+  background:
+    radial-gradient(ellipse at 0% 20%, #eadcf3 0%, transparent 40%),
+    radial-gradient(ellipse at 100% 80%, #e5d3ed 0%, transparent 38%),
+    #fffaf5;
+}
+
+/* Contacto */
+.contact-section {
+  background:
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,.5), transparent 32%),
+    linear-gradient(120deg, #eadcf1, #dfcce9);
+}
+
+.contact-links a {
+  transition: all .25s ease;
+}
+
+.contact-links a:hover {
+  padding-left: 12px;
+  color: #9a68ae;
+}
+
+/* Pie de página */
+.site-footer {
+  background:
+    radial-gradient(circle at 90% 0%, rgba(143, 91, 137, .23), transparent 35%),
+    #321d35;
+}
+
+.footer-brand .brand-mark {
+  background: linear-gradient(145deg, #916b91, #684b70);
+}
+
+/* Animaciones suaves */
+.feature-card,
+.button-primary,
+.button-secondary,
+.button-light,
+.art-card {
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    background .28s ease;
+}
+
+/* Ajustes para celulares */
+@media (max-width: 760px) {
+  .hero {
+    min-height: auto;
+    padding-top: 55px;
+  }
+
+  .hero-art {
+    margin-top: 15px;
+    border-radius: 45%;
+  }
+
+  .feature-card {
+    min-height: 270px;
+    padding: 27px;
+  }
+
+  .donation-banner,
+  .ai-banner {
+    border-radius: 15px;
+  }
+
+  .intro-section {
+    padding-top: 75px;
+    padding-bottom: 75px;
   }
 }
