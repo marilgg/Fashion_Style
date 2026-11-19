@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import { listarProductos } from "./api.js";
+import { listarProductos, enviarDonacion } from "./api.js";
 
 import {
   Menu,
@@ -105,7 +104,8 @@ function App() {
   const [contactSent, setContactSent] = useState(false);
 
   const [chatMessages, setChatMessages] = useState([
-    {
+    const [donationLoading, setDonationLoading] = useState(false);
+const [donationError, setDonationError] = useState("");    {
       role: "bot",
       text: "¡Hola! Soy el asistente de Fashion Style. Puedo contarte sobre moda circular, donaciones y cuidado de prendas. ¿Qué te gustaría saber?"
     }
@@ -172,10 +172,35 @@ function App() {
   }
 
   function submitDonation(e) {
-    e.preventDefault();
+async function submitDonation(e) {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+  const formData = new FormData(form);
+
+  const datos = {
+    nombre: formData.get("name"),
+    correo: formData.get("email"),
+    tipo: formData.get("type"),
+    cantidad: formData.get("quantity")
+  };
+
+  setDonationLoading(true);
+  setDonationError("");
+
+  try {
+    await enviarDonacion(datos);
+
     setDonationSent(true);
-    e.target.reset();
+    form.reset();
+  } catch (error) {
+    setDonationError(
+      error.message || "No fue posible enviar la donación. Inténtalo nuevamente."
+    );
+  } finally {
+    setDonationLoading(false);
   }
+}
 
   function submitContact(e) {
     e.preventDefault();
