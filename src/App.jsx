@@ -1,6 +1,10 @@
 
 import { useEffect, useState } from "react";
-import { listarProductos, enviarDonacion } from "./api.js";
+import {
+  listarProductos,
+  enviarDonacion,
+  enviarContacto
+} from "./api.js";
 
 import {
   Menu,
@@ -106,6 +110,8 @@ function App() {
   const [donationError, setDonationError] = useState("");
 
   const [contactSent, setContactSent] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactError, setContactError] = useState("");
 
   const [chatMessages, setChatMessages] = useState([
     {
@@ -209,10 +215,39 @@ function App() {
     }
   }
 
-  function submitContact(e) {
+  // Enviar contacto al backend
+  async function submitContact(e) {
     e.preventDefault();
-    setContactSent(true);
-    e.target.reset();
+
+    if (contactLoading) return;
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const datos = {
+      nombre: formData.get("name"),
+      correo: formData.get("email"),
+      asunto: formData.get("subject"),
+      mensaje: formData.get("message")
+    };
+
+    setContactLoading(true);
+    setContactError("");
+    setContactSent(false);
+
+    try {
+      await enviarContacto(datos);
+
+      setContactSent(true);
+      form.reset();
+    } catch (error) {
+      setContactError(
+        error.message ||
+        "No fue posible enviar el mensaje. Inténtalo nuevamente."
+      );
+    } finally {
+      setContactLoading(false);
+    }
   }
 
   function sendChat(e) {
@@ -901,6 +936,12 @@ function App() {
           <form className="form-card" onSubmit={submitContact}>
             <h3>Envíanos un mensaje</h3>
 
+            {contactError && (
+              <p className="form-error" role="alert">
+                {contactError}
+              </p>
+            )}
+
             <label>
               Nombre
               <input required name="name" placeholder="Tu nombre" />
@@ -935,14 +976,19 @@ function App() {
               />
             </label>
 
-            <button className="btn btn-dark form-submit" type="submit">
-              Enviar mensaje <Send size={16} />
+            <button
+              className="btn btn-dark form-submit"
+              type="submit"
+              disabled={contactLoading}
+            >
+              {contactLoading ? "Enviando..." : "Enviar mensaje"}
+              <Send size={16} />
             </button>
 
             {contactSent && (
-              <div className="form-success">
-                ¡Gracias por escribirnos! Este formulario todavía está
-                en proceso de conexión con la base de datos.
+              <div className="form-success" role="status">
+                ¡Gracias por escribirnos! Tu mensaje fue recibido correctamente
+                por el servidor de Fashion Style.
               </div>
             )}
           </form>
