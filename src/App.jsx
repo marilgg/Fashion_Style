@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { listarProductos, enviarDonacion } from "./api.js";
 
@@ -101,11 +102,13 @@ function App() {
   const [category, setCategory] = useState("Todas");
 
   const [donationSent, setDonationSent] = useState(false);
+  const [donationLoading, setDonationLoading] = useState(false);
+  const [donationError, setDonationError] = useState("");
+
   const [contactSent, setContactSent] = useState(false);
 
   const [chatMessages, setChatMessages] = useState([
-    const [donationLoading, setDonationLoading] = useState(false);
-const [donationError, setDonationError] = useState("");    {
+    {
       role: "bot",
       text: "¡Hola! Soy el asistente de Fashion Style. Puedo contarte sobre moda circular, donaciones y cuidado de prendas. ¿Qué te gustaría saber?"
     }
@@ -171,36 +174,40 @@ const [donationError, setDonationError] = useState("");    {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function submitDonation(e) {
-async function submitDonation(e) {
-  e.preventDefault();
+  // Enviar donación al backend
+  async function submitDonation(e) {
+    e.preventDefault();
 
-  const form = e.currentTarget;
-  const formData = new FormData(form);
+    if (donationLoading) return;
 
-  const datos = {
-    nombre: formData.get("name"),
-    correo: formData.get("email"),
-    tipo: formData.get("type"),
-    cantidad: formData.get("quantity")
-  };
+    const form = e.currentTarget;
+    const formData = new FormData(form);
 
-  setDonationLoading(true);
-  setDonationError("");
+    const datos = {
+      nombre: formData.get("name"),
+      correo: formData.get("email"),
+      tipo: formData.get("type"),
+      cantidad: formData.get("quantity")
+    };
 
-  try {
-    await enviarDonacion(datos);
+    setDonationLoading(true);
+    setDonationError("");
+    setDonationSent(false);
 
-    setDonationSent(true);
-    form.reset();
-  } catch (error) {
-    setDonationError(
-      error.message || "No fue posible enviar la donación. Inténtalo nuevamente."
-    );
-  } finally {
-    setDonationLoading(false);
+    try {
+      await enviarDonacion(datos);
+
+      setDonationSent(true);
+      form.reset();
+    } catch (error) {
+      setDonationError(
+        error.message ||
+        "No fue posible enviar la donación. Inténtalo nuevamente."
+      );
+    } finally {
+      setDonationLoading(false);
+    }
   }
-}
 
   function submitContact(e) {
     e.preventDefault();
@@ -567,6 +574,12 @@ async function submitDonation(e) {
           <form className="form-card" onSubmit={submitDonation}>
             <h3>Registro de intención de donación</h3>
 
+            {donationError && (
+              <p className="form-error" role="alert">
+                {donationError}
+              </p>
+            )}
+
             <label>
               Nombre completo
               <input required name="name" placeholder="Tu nombre" />
@@ -617,14 +630,19 @@ async function submitDonation(e) {
               />
             </label>
 
-            <button className="btn btn-dark form-submit" type="submit">
-              Enviar intención <ArrowRight size={16} />
+            <button
+              className="btn btn-dark form-submit"
+              type="submit"
+              disabled={donationLoading}
+            >
+              {donationLoading ? "Enviando..." : "Enviar intención"}
+              <ArrowRight size={16} />
             </button>
 
             {donationSent && (
-              <div className="form-success">
-                ¡Gracias por tu intención de donar! Este formulario todavía
-                está en proceso de conexión con la base de datos.
+              <div className="form-success" role="status">
+                ¡Gracias! Tu intención de donación fue recibida correctamente
+                por el servidor de Fashion Style.
               </div>
             )}
           </form>
