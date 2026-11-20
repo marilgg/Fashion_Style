@@ -5,6 +5,8 @@ import {
   enviarContacto
 } from "./api.js";
 
+import AdminPanel from "./AdminPanel.jsx";
+
 import {
   Menu,
   X,
@@ -121,12 +123,10 @@ function App() {
 
   const [chatInput, setChatInput] = useState("");
 
-  // Estados del catálogo conectado al backend
   const [products, setProducts] = useState(demoProducts);
   const [productsLoading, setProductsLoading] = useState(true);
   const [productsError, setProductsError] = useState("");
 
-  // Consultar productos desde Render
   useEffect(() => {
     let active = true;
 
@@ -179,7 +179,6 @@ function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Enviar donación al backend
   async function submitDonation(e) {
     e.preventDefault();
 
@@ -214,7 +213,6 @@ function App() {
     }
   }
 
-  // Enviar contacto al backend
   async function submitContact(e) {
     e.preventDefault();
 
@@ -1052,6 +1050,10 @@ function App() {
         {page === "campanas" && <Campaigns />}
         {page === "asistente" && <Assistant />}
         {page === "contacto" && <Contact />}
+
+        {page === "admin" && (
+          <AdminPanel onBack={() => navigate("inicio")} />
+        )}
       </main>
 
       <footer className="site-footer">
@@ -1083,6 +1085,13 @@ function App() {
             </button>
           ))}
         </div>
+
+        <button
+          className="footer-admin-link"
+          onClick={() => navigate("admin")}
+        >
+          Administración
+        </button>
 
         <span className="footer-copy">
           © {new Date().getFullYear()} Fashion Style · Wear the change
