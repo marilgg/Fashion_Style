@@ -19,13 +19,52 @@ async function request(endpoint, options = {}) {
   return data;
 }
 
+// ==============================
 // PRODUCTOS
+// ==============================
+
+// Consultar productos
 export async function listarProductos() {
   const data = await request("/api/productos");
   return data.productos;
 }
 
+// Crear producto (ADMIN)
+export function crearProductoAdmin(token, datos) {
+  return request("/api/admin/productos", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(datos)
+  });
+}
+
+// Editar producto (ADMIN)
+export function editarProductoAdmin(token, id, datos) {
+  return request(`/api/admin/productos/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(datos)
+  });
+}
+
+// Eliminar producto (ADMIN)
+export function eliminarProductoAdmin(token, id) {
+  return request(`/api/admin/productos/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+}
+
+// ==============================
 // DONACIONES
+// ==============================
+
 export function enviarDonacion(datos) {
   return request("/api/donaciones", {
     method: "POST",
@@ -33,7 +72,10 @@ export function enviarDonacion(datos) {
   });
 }
 
+// ==============================
 // CONTACTO
+// ==============================
+
 export function enviarContacto(datos) {
   return request("/api/contacto", {
     method: "POST",
@@ -41,12 +83,19 @@ export function enviarContacto(datos) {
   });
 }
 
+// ==============================
 // SERVIDOR
+// ==============================
+
 export function comprobarServidor() {
   return request("/api/health");
 }
 
-// INICIAR SESIÓN ADMINISTRATIVA
+// ==============================
+// ADMINISTRACIÓN
+// ==============================
+
+// Iniciar sesión administrativa
 export function iniciarSesionAdmin(email, password) {
   return request("/api/admin/login", {
     method: "POST",
@@ -54,7 +103,7 @@ export function iniciarSesionAdmin(email, password) {
   });
 }
 
-// CONSULTAR DONACIONES
+// Consultar donaciones
 export function listarDonacionesAdmin(token) {
   return request("/api/admin/donaciones", {
     headers: {
@@ -63,7 +112,7 @@ export function listarDonacionesAdmin(token) {
   });
 }
 
-// CONSULTAR MENSAJES
+// Consultar mensajes de contacto
 export function listarContactosAdmin(token) {
   return request("/api/admin/contactos", {
     headers: {
