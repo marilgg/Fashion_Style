@@ -9,19 +9,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de CORS
+// CONFIGURACIÓN DE CORS
 app.use(cors({
   origin: [
     "https://marilgg.github.io",
     "http://localhost:5173"
   ],
-  methods: ["GET", "POST", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
 
-// Conexión con Supabase
+// CONEXIÓN CON SUPABASE
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SECRET_KEY;
 
@@ -32,12 +32,12 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Configuración de administración
+// CONFIGURACIÓN ADMINISTRATIVA
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET;
 
-// Comparación segura de valores
+// COMPARACIÓN SEGURA
 function compararSeguro(valor1, valor2) {
   const a = Buffer.from(String(valor1));
   const b = Buffer.from(String(valor2));
@@ -49,7 +49,7 @@ function compararSeguro(valor1, valor2) {
   return timingSafeEqual(a, b);
 }
 
-// Crear token firmado
+// CREAR TOKEN
 function crearToken(email) {
   const payload = Buffer.from(JSON.stringify({
     email,
@@ -63,7 +63,7 @@ function crearToken(email) {
   return `${payload}.${firma}`;
 }
 
-// Verificar token
+// VERIFICAR TOKEN
 function verificarToken(token) {
   try {
     const partes = token.split(".");
@@ -99,7 +99,7 @@ function verificarToken(token) {
   }
 }
 
-// Proteger las rutas administrativas
+// AUTENTICACIÓN ADMINISTRATIVA
 function autenticarAdmin(req, res, next) {
   const autorizacion = req.headers.authorization;
 
@@ -122,7 +122,39 @@ function autenticarAdmin(req, res, next) {
   next();
 }
 
-// Ruta principal
+// VALIDAR DATOS DE PRODUCTO
+function validarProducto(datos) {
+  const { nombre, categoria, precio, stock } = datos;
+
+  const precioNumero = Number(precio);
+  const stockNumero = Number(stock);
+
+  if (
+    typeof nombre !== "string" ||
+    !nombre.trim() ||
+    typeof categoria !== "string" ||
+    !categoria.trim() ||
+    precio === "" ||
+    precio === null ||
+    !Number.isFinite(precioNumero) ||
+    precioNumero < 0 ||
+    stock === "" ||
+    stock === null ||
+    !Number.isInteger(stockNumero) ||
+    stockNumero < 0
+  ) {
+    return null;
+  }
+
+  return {
+    nombre: nombre.trim(),
+    categoria: categoria.trim(),
+    precio: precioNumero,
+    stock: stockNumero
+  };
+}
+
+// RUTA PRINCIPAL
 app.get("/", (req, res) => {
   res.json({
     mensaje: "Fashion Style API funcionando correctamente",
@@ -130,7 +162,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Comprobar conexión con Supabase
+// COMPROBAR CONEXIÓN
 app.get("/api/health", async (req, res) => {
   const { error } = await supabase
     .from("productos")
@@ -143,7 +175,6 @@ app.get("/api/health", async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: "No se pudo conectar con Supabase",
-      detalles: error.message,
       codigo: error.code
     });
   }
@@ -154,7 +185,7 @@ app.get("/api/health", async (req, res) => {
   });
 });
 
-// Listar productos
+// CONSULTAR TODOS LOS PRODUCTOS
 app.get("/api/productos", async (req, res) => {
   const { data, error, count } = await supabase
     .from("productos")
@@ -162,12 +193,10 @@ app.get("/api/productos", async (req, res) => {
     .order("id", { ascending: true });
 
   if (error) {
-    console.error("Error de Supabase:", error);
+    console.error("Error consultando productos:", error);
 
     return res.status(500).json({
-      error: error.message,
-      codigo: error.code,
-      detalles: error.details
+      error: "No se pudieron consultar los productos"
     });
   }
 
@@ -177,20 +206,27 @@ app.get("/api/productos", async (req, res) => {
   });
 });
 
-// Consultar un producto por ID
+// CONSULTAR PRODUCTO POR ID
 app.get("/api/productos/:id", async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({
+      error: "ID de producto no válido"
+    });
+  }
+
   const { data, error } = await supabase
     .from("productos")
     .select("*")
-    .eq("id", req.params.id)
+    .eq("id", id)
     .maybeSingle();
 
   if (error) {
     console.error("Error consultando producto:", error);
 
     return res.status(500).json({
-      error: "Error al consultar el producto",
-      detalles: error.message
+      error: "Error al consultar el producto"
     });
   }
 
@@ -203,7 +239,7 @@ app.get("/api/productos/:id", async (req, res) => {
   res.json(data);
 });
 
-// Guardar donaciones
+// GUARDAR DONACIONES
 app.post("/api/donaciones", async (req, res) => {
   const { nombre, correo, tipo, cantidad } = req.body;
 
@@ -234,8 +270,7 @@ app.post("/api/donaciones", async (req, res) => {
     console.error("Error guardando donación:", error);
 
     return res.status(500).json({
-      error: "No se pudo guardar la donación",
-      detalles: error.message
+      error: "No se pudo guardar la donación"
     });
   }
 
@@ -245,7 +280,7 @@ app.post("/api/donaciones", async (req, res) => {
   });
 });
 
-// Guardar mensajes de contacto
+// GUARDAR CONTACTOS
 app.post("/api/contacto", async (req, res) => {
   const { nombre, correo, asunto, mensaje } = req.body;
 
@@ -270,8 +305,7 @@ app.post("/api/contacto", async (req, res) => {
     console.error("Error guardando contacto:", error);
 
     return res.status(500).json({
-      error: "No se pudo guardar el mensaje",
-      detalles: error.message
+      error: "No se pudo guardar el mensaje"
     });
   }
 
@@ -285,11 +319,11 @@ app.post("/api/contacto", async (req, res) => {
 // ADMINISTRACIÓN
 // ================================
 
-// Iniciar sesión administrativa
+// INICIAR SESIÓN
 app.post("/api/admin/login", (req, res) => {
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_TOKEN_SECRET) {
     return res.status(503).json({
-      error: "La administración todavía no está configurada en el servidor"
+      error: "La administración no está configurada"
     });
   }
 
@@ -314,7 +348,7 @@ app.post("/api/admin/login", (req, res) => {
   });
 });
 
-// Consultar donaciones (solo administrador)
+// CONSULTAR DONACIONES
 app.get(
   "/api/admin/donaciones",
   autenticarAdmin,
@@ -339,7 +373,7 @@ app.get(
   }
 );
 
-// Consultar contactos (solo administrador)
+// CONSULTAR CONTACTOS
 app.get(
   "/api/admin/contactos",
   autenticarAdmin,
@@ -364,14 +398,135 @@ app.get(
   }
 );
 
-// Rutas inexistentes
+// ================================
+// CRUD ADMINISTRATIVO DE PRODUCTOS
+// ================================
+
+// CREAR PRODUCTO
+app.post(
+  "/api/admin/productos",
+  autenticarAdmin,
+  async (req, res) => {
+    const producto = validarProducto(req.body);
+
+    if (!producto) {
+      return res.status(400).json({
+        error: "Verifica nombre, categoría, precio y stock"
+      });
+    }
+
+    const { data, error } = await supabase
+      .from("productos")
+      .insert([producto])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creando producto:", error);
+
+      return res.status(500).json({
+        error: "No se pudo crear el producto"
+      });
+    }
+
+    res.status(201).json({
+      mensaje: "Producto creado correctamente",
+      producto: data
+    });
+  }
+);
+
+// EDITAR PRODUCTO
+app.put(
+  "/api/admin/productos/:id",
+  autenticarAdmin,
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const producto = validarProducto(req.body);
+
+    if (!Number.isInteger(id) || id <= 0 || !producto) {
+      return res.status(400).json({
+        error: "ID o datos del producto no válidos"
+      });
+    }
+
+    const { data, error } = await supabase
+      .from("productos")
+      .update(producto)
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error editando producto:", error);
+
+      return res.status(500).json({
+        error: "No se pudo actualizar el producto"
+      });
+    }
+
+    if (!data) {
+      return res.status(404).json({
+        error: "Producto no encontrado"
+      });
+    }
+
+    res.json({
+      mensaje: "Producto actualizado correctamente",
+      producto: data
+    });
+  }
+);
+
+// ELIMINAR PRODUCTO
+app.delete(
+  "/api/admin/productos/:id",
+  autenticarAdmin,
+  async (req, res) => {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({
+        error: "ID de producto no válido"
+      });
+    }
+
+    const { data, error } = await supabase
+      .from("productos")
+      .delete()
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error eliminando producto:", error);
+
+      return res.status(500).json({
+        error: "No se pudo eliminar el producto"
+      });
+    }
+
+    if (!data) {
+      return res.status(404).json({
+        error: "Producto no encontrado"
+      });
+    }
+
+    res.json({
+      mensaje: "Producto eliminado correctamente",
+      producto: data
+    });
+  }
+);
+
+// RUTAS INEXISTENTES
 app.use((req, res) => {
   res.status(404).json({
     error: "Ruta no encontrada"
   });
 });
 
-// Iniciar servidor
+// INICIAR SERVIDOR
 app.listen(PORT, () => {
   console.log(`Fashion Style API activa en el puerto ${PORT}`);
 });
