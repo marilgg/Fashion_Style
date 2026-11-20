@@ -8,6 +8,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configuración de CORS
 app.use(cors({
   origin: [
     "https://marilgg.github.io",
@@ -17,6 +18,7 @@ app.use(cors({
 
 app.use(express.json());
 
+// Conexión con Supabase
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SECRET_KEY;
 
@@ -43,9 +45,13 @@ app.get("/api/health", async (req, res) => {
     .limit(1);
 
   if (error) {
+    console.error("Error de conexión:", error);
+
     return res.status(500).json({
       status: "error",
-      message: "No se pudo conectar con Supabase"
+      message: "No se pudo conectar con Supabase",
+      detalles: error.message,
+      codigo: error.code
     });
   }
 
@@ -57,21 +63,31 @@ app.get("/api/health", async (req, res) => {
 
 // Listar productos
 app.get("/api/productos", async (req, res) => {
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from("productos")
-    .select("*")
+    .select("*", { count: "exact" })
     .order("id", { ascending: true });
 
   if (error) {
+    console.error("Error de Supabase:", error);
+
     return res.status(500).json({
-      error: "No se pudieron consultar los productos"
+      error: error.message,
+      codigo: error.code,
+      detalles: error.details
     });
   }
 
-  res.json(data);
+  console.log("Productos encontrados:", count);
+  console.log("Datos recibidos:", data);
+
+  res.json({
+    total: count,
+    productos: data
+  });
 });
 
-// Consultar un producto
+// Consultar un producto por ID
 app.get("/api/productos/:id", async (req, res) => {
   const { data, error } = await supabase
     .from("productos")
@@ -80,8 +96,11 @@ app.get("/api/productos/:id", async (req, res) => {
     .maybeSingle();
 
   if (error) {
+    console.error("Error consultando producto:", error);
+
     return res.status(500).json({
-      error: "Error al consultar el producto"
+      error: "Error al consultar el producto",
+      detalles: error.message
     });
   }
 
@@ -122,8 +141,11 @@ app.post("/api/donaciones", async (req, res) => {
     .single();
 
   if (error) {
+    console.error("Error guardando donación:", error);
+
     return res.status(500).json({
-      error: "No se pudo guardar la donación"
+      error: "No se pudo guardar la donación",
+      detalles: error.message
     });
   }
 
@@ -145,13 +167,21 @@ app.post("/api/contacto", async (req, res) => {
 
   const { data, error } = await supabase
     .from("contactos")
-    .insert([{ nombre, correo, asunto, mensaje }])
+    .insert([{
+      nombre,
+      correo,
+      asunto,
+      mensaje
+    }])
     .select()
     .single();
 
   if (error) {
+    console.error("Error guardando contacto:", error);
+
     return res.status(500).json({
-      error: "No se pudo guardar el mensaje"
+      error: "No se pudo guardar el mensaje",
+      detalles: error.message
     });
   }
 
@@ -168,6 +198,7 @@ app.use((req, res) => {
   });
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Fashion Style API activa en el puerto ${PORT}`);
 });
