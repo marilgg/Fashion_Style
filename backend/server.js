@@ -1,13 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { createClient } from "@supabase/supabase-js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
 app.use(cors({
   origin: [
     "https://marilgg.github.io",
@@ -17,7 +17,16 @@ app.use(cors({
 
 app.use(express.json());
 
-// Inicio de la API
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SECRET_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error("Faltan las variables de Supabase.");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 app.get("/", (req, res) => {
   res.json({
     mensaje: "Fashion Style API funcionando correctamente",
@@ -25,77 +34,89 @@ app.get("/", (req, res) => {
   });
 });
 
-// Comprobar estado del servidor
-app.get("/api/health", (req, res) => {
+app.get("/api/health", async (req, res) => {
+  const { error } = await supabase
+    .from("productos")
+    .select("id")
+    .limit(1);
+
+  if (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "No se pudo conectar con Supabase"
+    });
+  }
+
   res.json({
     status: "ok",
-    message: "Backend Fashion Style activo"
+    message: "Backend conectado a Supabase"
   });
 });
 
-// Productos de prueba
-const productos = [
-  {
-    id: 1,
-    nombre: "Blusa sostenible",
-    categoria: "Blusas",
-    precio: 45000,
-    stock: 10
-  },
-  {
-    id: 2,
-    nombre: "Jean reutilizado",
-    categoria: "Pantalones",
-    precio: 65000,
-    stock: 5
-  },
-  {
-    id: 3,
-    nombre: "Vestido ecológico",
-    categoria: "Vestidos",
-    precio: 80000,
-    stock: 4
-  }
-];
+app.get("/api/productos", async (req, res) => {
+  const { data, error } = await supabase
+    .from("productos")
+    .select("*")
+    .order("id", { ascending: true });
 
-// Consultar productos
-app.get("/api/productos", (req, res) => {
-  res.json(productos);
-});
-
-// Consultar un producto por ID
-app.get("/api/productos/:id", (req, res) => {
-  const producto = productos.find(
-    p => p.id === Number(req.params.id)
-  );
-
-  if (!producto) {
-    return res.status(404).json({
-      error: "Producto no encontrado"
+  if (error) {
+    return res.status(500).json({
+      error: "No se pudieron consultar los productos"
     });
   }
 
-  res.json(producto);
+  res.json(data);
 });
 
-// Recibir donaciones (temporal, sin base de datos)
-app.post("/api/donaciones", (req, res) => {
+app.get("/api/productos/:id", async (req, res) => {
+  const { data, error } = await supabase
+    .from("productos")
+    .select("*")
+    .eq("id", req.params.id)
+    .maybeSingle();
+
+  if (error) {
+    return res.status(500).json({ error: "Error al consultar el producto" });
+  }
+
+  if (!data) {
+    return res.status(404).json({ error: "Producto no encontrado" });
+  }
+
+  res.json(data);
+});
+
+app.post("/api/donaciones", async (req, res) => {
   const { nombre, correo, tipo, cantidad } = req.body;
 
-  if (!nombre || !correo || !tipo || !cantidad) {
+  if (!nombre || !correo || !tipo || !Number.isInteger(Number(cantidad)) || Number(cantidad) <= 0) {
     return res.status(400).json({
-      error: "Todos los campos obligatorios deben completarse"
+      error: "Completa correctamente todos los campos"
     });
+  }
+
+  const { data, error } = await supabase
+    .from("donaciones")
+    .insert([{
+      nombre,
+      correo,
+      tipo,
+      cantidad: Number(cantidad)
+    }])
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(500).json({ error: "No se pudo guardar la donación" });
   }
 
   res.status(201).json({
-    mensaje: "Donación recibida correctamente",
-    donacion: { nombre, correo, tipo, cantidad }
+    mensaje: "Donación guardada correctamente",
+    donacion: data
   });
 });
 
-// Recibir mensajes de contacto (temporal, sin base de datos)
-app.post("/api/contacto", (req, res) => {
+app.post("/api/contacto", async (req, res) => {
   const { nombre, correo, asunto, mensaje } = req.body;
 
   if (!nombre || !correo || !asunto || !mensaje) {
@@ -104,19 +125,26 @@ app.post("/api/contacto", (req, res) => {
     });
   }
 
+  const { data, error } = await supabase
+    .from("contactos")
+    .insert([{ nombre, correo, asunto, mensaje }])
+    .select()
+    .single();
+
+  if (error) {
+    return res.status(500).json({ error: "No se pudo guardar el mensaje" });
+  }
+
   res.status(201).json({
-    mensaje: "Mensaje recibido correctamente"
+    mensaje: "Mensaje guardado correctamente",
+    contacto: data
   });
 });
 
-// Ruta inexistente
 app.use((req, res) => {
-  res.status(404).json({
-    error: "Ruta no encontrada"
-  });
+  res.status(404).json({ error: "Ruta no encontrada" });
 });
 
-// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Fashion Style API activa en el puerto ${PORT}`);
 });
