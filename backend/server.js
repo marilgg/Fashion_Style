@@ -27,6 +27,7 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Ruta principal
 app.get("/", (req, res) => {
   res.json({
     mensaje: "Fashion Style API funcionando correctamente",
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
   });
 });
 
+// Comprobar conexión con Supabase
 app.get("/api/health", async (req, res) => {
   const { error } = await supabase
     .from("productos")
@@ -53,6 +55,7 @@ app.get("/api/health", async (req, res) => {
   });
 });
 
+// Listar productos
 app.get("/api/productos", async (req, res) => {
   const { data, error } = await supabase
     .from("productos")
@@ -68,6 +71,7 @@ app.get("/api/productos", async (req, res) => {
   res.json(data);
 });
 
+// Consultar un producto
 app.get("/api/productos/:id", async (req, res) => {
   const { data, error } = await supabase
     .from("productos")
@@ -76,20 +80,31 @@ app.get("/api/productos/:id", async (req, res) => {
     .maybeSingle();
 
   if (error) {
-    return res.status(500).json({ error: "Error al consultar el producto" });
+    return res.status(500).json({
+      error: "Error al consultar el producto"
+    });
   }
 
   if (!data) {
-    return res.status(404).json({ error: "Producto no encontrado" });
+    return res.status(404).json({
+      error: "Producto no encontrado"
+    });
   }
 
   res.json(data);
 });
 
+// Guardar donaciones
 app.post("/api/donaciones", async (req, res) => {
   const { nombre, correo, tipo, cantidad } = req.body;
 
-  if (!nombre || !correo || !tipo || !Number.isInteger(Number(cantidad)) || Number(cantidad) <= 0) {
+  if (
+    !nombre ||
+    !correo ||
+    !tipo ||
+    !Number.isInteger(Number(cantidad)) ||
+    Number(cantidad) <= 0
+  ) {
     return res.status(400).json({
       error: "Completa correctamente todos los campos"
     });
@@ -107,7 +122,9 @@ app.post("/api/donaciones", async (req, res) => {
     .single();
 
   if (error) {
-    return res.status(500).json({ error: "No se pudo guardar la donación" });
+    return res.status(500).json({
+      error: "No se pudo guardar la donación"
+    });
   }
 
   res.status(201).json({
@@ -116,6 +133,7 @@ app.post("/api/donaciones", async (req, res) => {
   });
 });
 
+// Guardar mensajes de contacto
 app.post("/api/contacto", async (req, res) => {
   const { nombre, correo, asunto, mensaje } = req.body;
 
@@ -132,7 +150,9 @@ app.post("/api/contacto", async (req, res) => {
     .single();
 
   if (error) {
-    return res.status(500).json({ error: "No se pudo guardar el mensaje" });
+    return res.status(500).json({
+      error: "No se pudo guardar el mensaje"
+    });
   }
 
   res.status(201).json({
@@ -141,8 +161,11 @@ app.post("/api/contacto", async (req, res) => {
   });
 });
 
+// Rutas inexistentes
 app.use((req, res) => {
-  res.status(404).json({ error: "Ruta no encontrada" });
+  res.status(404).json({
+    error: "Ruta no encontrada"
+  });
 });
 
 app.listen(PORT, () => {
