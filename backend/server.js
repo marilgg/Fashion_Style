@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { createClient } from "@supabase/supabase-js";
+import { createHmac, timingSafeEqual } from "node:crypto";
 
 dotenv.config();
 
@@ -13,7 +14,9 @@ app.use(cors({
   origin: [
     "https://marilgg.github.io",
     "http://localhost:5173"
-  ]
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
@@ -28,6 +31,96 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Configuración de administración
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMIN_TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET;
+
+// Comparación segura de valores
+function compararSeguro(valor1, valor2) {
+  const a = Buffer.from(String(valor1));
+  const b = Buffer.from(String(valor2));
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  return timingSafeEqual(a, b);
+}
+
+// Crear token firmado
+function crearToken(email) {
+  const payload = Buffer.from(JSON.stringify({
+    email,
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 8
+  })).toString("base64url");
+
+  const firma = createHmac("sha256", ADMIN_TOKEN_SECRET)
+    .update(payload)
+    .digest("base64url");
+
+  return `${payload}.${firma}`;
+}
+
+// Verificar token
+function verificarToken(token) {
+  try {
+    const partes = token.split(".");
+
+    if (partes.length !== 2) {
+      return null;
+    }
+
+    const [payload, firma] = partes;
+
+    const firmaEsperada = createHmac("sha256", ADMIN_TOKEN_SECRET)
+      .update(payload)
+      .digest("base64url");
+
+    if (!compararSeguro(firma, firmaEsperada)) {
+      return null;
+    }
+
+    const datos = JSON.parse(
+      Buffer.from(payload, "base64url").toString("utf8")
+    );
+
+    if (
+      datos.email !== ADMIN_EMAIL ||
+      datos.exp < Math.floor(Date.now() / 1000)
+    ) {
+      return null;
+    }
+
+    return datos;
+  } catch {
+    return null;
+  }
+}
+
+// Proteger las rutas administrativas
+function autenticarAdmin(req, res, next) {
+  const autorizacion = req.headers.authorization;
+
+  if (!autorizacion || !autorizacion.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Debes iniciar sesión como administrador"
+    });
+  }
+
+  const token = autorizacion.slice(7);
+  const usuario = verificarToken(token);
+
+  if (!usuario) {
+    return res.status(401).json({
+      error: "Sesión inválida o vencida"
+    });
+  }
+
+  req.admin = usuario;
+  next();
+}
 
 // Ruta principal
 app.get("/", (req, res) => {
@@ -77,9 +170,6 @@ app.get("/api/productos", async (req, res) => {
       detalles: error.details
     });
   }
-
-  console.log("Productos encontrados:", count);
-  console.log("Datos recibidos:", data);
 
   res.json({
     total: count,
@@ -190,6 +280,89 @@ app.post("/api/contacto", async (req, res) => {
     contacto: data
   });
 });
+
+// ================================
+// ADMINISTRACIÓN
+// ================================
+
+// Iniciar sesión administrativa
+app.post("/api/admin/login", (req, res) => {
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD || !ADMIN_TOKEN_SECRET) {
+    return res.status(503).json({
+      error: "La administración todavía no está configurada en el servidor"
+    });
+  }
+
+  const { email, password } = req.body;
+
+  if (
+    typeof email !== "string" ||
+    typeof password !== "string" ||
+    !compararSeguro(email, ADMIN_EMAIL) ||
+    !compararSeguro(password, ADMIN_PASSWORD)
+  ) {
+    return res.status(401).json({
+      error: "Correo o contraseña incorrectos"
+    });
+  }
+
+  const token = crearToken(ADMIN_EMAIL);
+
+  res.json({
+    mensaje: "Sesión iniciada correctamente",
+    token
+  });
+});
+
+// Consultar donaciones (solo administrador)
+app.get(
+  "/api/admin/donaciones",
+  autenticarAdmin,
+  async (req, res) => {
+    const { data, error } = await supabase
+      .from("donaciones")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error consultando donaciones:", error);
+
+      return res.status(500).json({
+        error: "No se pudieron consultar las donaciones"
+      });
+    }
+
+    res.json({
+      total: data.length,
+      donaciones: data
+    });
+  }
+);
+
+// Consultar contactos (solo administrador)
+app.get(
+  "/api/admin/contactos",
+  autenticarAdmin,
+  async (req, res) => {
+    const { data, error } = await supabase
+      .from("contactos")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error consultando contactos:", error);
+
+      return res.status(500).json({
+        error: "No se pudieron consultar los mensajes"
+      });
+    }
+
+    res.json({
+      total: data.length,
+      contactos: data
+    });
+  }
+);
 
 // Rutas inexistentes
 app.use((req, res) => {
