@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import {
   listarProductos,
@@ -8,24 +9,9 @@ import {
 import AdminPanel from "./AdminPanel.jsx";
 
 import {
-  Menu,
-  X,
-  Leaf,
-  ArrowRight,
-  Heart,
-  Recycle,
-  Sparkles,
-  Shirt,
-  MessageCircle,
-  Sprout,
-  Search,
-  House,
-  ShoppingBag,
-  HandHeart,
-  Megaphone,
-  Mail,
-  Send,
-  Flower2
+  Menu, X, Leaf, ArrowRight, Heart, Recycle, Sparkles,
+  Shirt, MessageCircle, Sprout, Search, House, ShoppingBag,
+  HandHeart, Megaphone, Mail, Send, Flower2
 } from "lucide-react";
 
 const navItems = [
@@ -38,53 +24,118 @@ const navItems = [
   { id: "contacto", label: "Contacto", icon: Mail }
 ];
 
+// Fotografías ilustrativas por categoría.
+// No representan necesariamente el producto exacto de Supabase.
+const productImages = {
+  blusas:
+    "https://images.unsplash.com/photo-1551163943-3f6a855d1153?auto=format&fit=crop&w=900&q=85",
+  camisas:
+    "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85",
+  chaquetas:
+    "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85",
+  pantalones:
+    "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=900&q=85",
+  vestidos:
+    "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=900&q=85",
+  sueteres:
+    "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=900&q=85",
+  accesorios:
+    "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=85",
+  default:
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85"
+};
+
+function getProductImage(category = "") {
+  const value = String(category).toLowerCase();
+
+  if (value.includes("blus")) return productImages.blusas;
+  if (value.includes("camis")) return productImages.camisas;
+  if (value.includes("chaquet")) return productImages.chaquetas;
+  if (value.includes("pantal") || value.includes("jean")) {
+    return productImages.pantalones;
+  }
+  if (value.includes("vestid")) return productImages.vestidos;
+  if (value.includes("sueter") || value.includes("suéter")) {
+    return productImages.sueteres;
+  }
+  if (value.includes("accesorio") || value.includes("bolso")) {
+    return productImages.accesorios;
+  }
+
+  return productImages.default;
+}
+
+function formatPrice(value) {
+  if (value === null || value === undefined || value === "") {
+    return "Precio no disponible";
+  }
+
+  const price = Number(value);
+
+  if (!Number.isFinite(price)) {
+    return "Precio no disponible";
+  }
+
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0
+  }).format(price);
+}
+
 const demoProducts = [
   {
     id: 1,
     name: "Camisa de lino",
     category: "Camisas",
-    condition: "Excelente",
-    color: "#e9dfd1",
+    price: 45000,
+    stock: 5,
+    image: productImages.camisas,
     description: "Una prenda versátil que merece seguir acompañándote."
   },
   {
     id: 2,
     name: "Chaqueta clásica",
     category: "Chaquetas",
-    condition: "Muy buena",
-    color: "#d9c8e4",
+    price: 85000,
+    stock: 3,
+    image: productImages.chaquetas,
     description: "Abrigos con estilo y nuevas oportunidades."
   },
   {
     id: 3,
-    name: "Denim circular",
+    name: "Jean reutilizado",
     category: "Pantalones",
-    condition: "Excelente",
-    color: "#c5d5db",
+    price: 60000,
+    stock: 4,
+    image: productImages.pantalones,
     description: "El denim nunca pasa de moda. Dale otra vuelta."
   },
   {
     id: 4,
-    name: "Vestido floral",
+    name: "Vestido ecológico",
     category: "Vestidos",
-    condition: "Muy buena",
-    color: "#e7d1d5",
+    price: 55000,
+    stock: 2,
+    image: productImages.vestidos,
     description: "Una historia que puede continuar en otro armario."
   },
   {
     id: 5,
     name: "Suéter tejido",
     category: "Suéteres",
-    condition: "Excelente",
-    color: "#d8e0d1",
+    price: 50000,
+    stock: 6,
+    image: productImages.sueteres,
     description: "Suave, atemporal y listo para una nueva temporada."
   },
   {
     id: 6,
     name: "Bolso reutilizable",
     category: "Accesorios",
-    condition: "Muy buena",
-    color: "#e4d9bf",
+    price: 35000,
+    stock: 4,
+    image: productImages.accesorios,
     description: "Pequeños detalles que hacen parte de un gran cambio."
   }
 ];
@@ -141,10 +192,13 @@ function App() {
         const adaptedProducts = data.map((product, index) => ({
           id: product.id,
           name: product.nombre,
-          category: product.categoria,
-          condition: "Disponible",
-          color: ["#e9dfd1", "#d9c8e4", "#c5d5db"][index % 3],
-          description: "Una prenda que puede tener una nueva historia."
+          category: product.categoria || "Otras prendas",
+          price: product.precio,
+          stock: Number(product.stock ?? 0),
+          image: getProductImage(product.categoria),
+          description:
+            "Una prenda que puede tener una nueva historia.",
+          color: ["#e9dfd1", "#d9c8e4", "#c5d5db"][index % 3]
         }));
 
         if (active) {
@@ -153,8 +207,9 @@ function App() {
         }
       } catch (error) {
         if (active) {
+          setProducts(demoProducts);
           setProductsError(
-            "No fue posible actualizar el catálogo. Mostramos los productos de ejemplo."
+            "No fue posible actualizar el catálogo. Mostramos productos de ejemplo."
           );
         }
       } finally {
@@ -200,7 +255,6 @@ function App() {
 
     try {
       await enviarDonacion(datos);
-
       setDonationSent(true);
       form.reset();
     } catch (error) {
@@ -234,7 +288,6 @@ function App() {
 
     try {
       await enviarContacto(datos);
-
       setContactSent(true);
       form.reset();
     } catch (error) {
@@ -245,22 +298,6 @@ function App() {
     } finally {
       setContactLoading(false);
     }
-  }
-
-  function sendChat(e) {
-    e.preventDefault();
-
-    if (!chatInput.trim()) return;
-
-    const question = chatInput.trim();
-
-    setChatMessages(prev => [
-      ...prev,
-      { role: "user", text: question },
-      { role: "bot", text: getReply(question) }
-    ]);
-
-    setChatInput("");
   }
 
   function getReply(question) {
@@ -290,14 +327,31 @@ function App() {
       return "Puedes explorar nuestro catálogo desde el menú. Encontrarás diferentes categorías de prendas y algunas ideas para darles una segunda vida.";
     }
 
-    return "¡Gracias por tu pregunta! Soy la versión inicial del asistente de Fashion Style. Puedo ayudarte con donaciones, sostenibilidad, cuidado de ropa y reutilización. Prueba preguntándome por alguno de esos temas.";
+    return "¡Gracias por tu pregunta! Soy la versión inicial del asistente de Fashion Style. Puedo ayudarte con donaciones, sostenibilidad, cuidado de ropa y reutilización.";
+  }
+
+  function sendChat(e) {
+    e.preventDefault();
+
+    if (!chatInput.trim()) return;
+
+    const question = chatInput.trim();
+
+    setChatMessages(prev => [
+      ...prev,
+      { role: "user", text: question },
+      { role: "bot", text: getReply(question) }
+    ]);
+
+    setChatInput("");
   }
 
   const filteredProducts = products.filter(product => {
     const matchesCategory =
-      category === "Todas" || product.category === category;
+      category === "Todas" ||
+      String(product.category).toLowerCase() === category.toLowerCase();
 
-    const matchesSearch = product.name
+    const matchesSearch = String(product.name)
       .toLowerCase()
       .includes(search.toLowerCase());
 
@@ -477,7 +531,7 @@ function App() {
         <PageHeading
           eyebrow="PRENDAS CON OTRA HISTORIA"
           title={<>Explora el <em>catálogo.</em></>}
-          description="Descubre prendas, ideas y posibilidades. La moda circular empieza cuando algo puede continuar."
+          description="Descubre prendas disponibles, conoce sus precios y encuentra nuevas posibilidades para darles una segunda vida."
         />
 
         <div className="catalog-tools">
@@ -522,13 +576,31 @@ function App() {
                 <article className="product-card" key={product.id}>
                   <div
                     className="product-art"
-                    style={{ background: product.color }}
+                    style={{
+                      background: product.color || "#eee8e2",
+                      padding: 0,
+                      overflow: "hidden",
+                      position: "relative"
+                    }}
                   >
+                    <img
+                      src={product.image || getProductImage(product.category)}
+                      alt={`Fotografía ilustrativa de ${product.name}`}
+                      loading="lazy"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block"
+                      }}
+                      onError={e => {
+                        e.currentTarget.style.display = "none";
+                      }}
+                    />
+
                     <span className="product-number">
                       FS / {String(product.id).padStart(2, "0")}
                     </span>
-
-                    <Shirt size={100} strokeWidth={0.85} />
 
                     <span className="product-tag">
                       CIRCULAR SELECTION
@@ -537,19 +609,33 @@ function App() {
 
                   <div className="product-info">
                     <span className="product-category">
-                      {product.category} · {product.condition}
+                      {product.category}
                     </span>
 
                     <h3>{product.name}</h3>
 
                     <p>{product.description}</p>
 
-                    <button
-                      className="product-action"
-                      onClick={() => navigate("donaciones")}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "10px",
+                        flexWrap: "wrap",
+                        marginTop: "14px"
+                      }}
                     >
-                      Conocer cómo participar <ArrowRight size={15} />
-                    </button>
+                      <strong className="product-price">
+                        {formatPrice(product.price)}
+                      </strong>
+
+                      <span className="product-stock">
+                        {Number(product.stock) > 0
+                          ? `${product.stock} disponibles`
+                          : "Agotado"}
+                      </span>
+                    </div>
                   </div>
                 </article>
               ))}
@@ -565,7 +651,8 @@ function App() {
 
         <div className="catalog-note">
           <Recycle size={19} />
-          Los productos se consultan desde el servidor de Fashion Style.
+          Los productos, precios y existencias se consultan desde el servidor
+          de Fashion Style.
         </div>
       </section>
     );
@@ -607,9 +694,7 @@ function App() {
             <h3>Registro de intención de donación</h3>
 
             {donationError && (
-              <p className="form-error" role="alert">
-                {donationError}
-              </p>
+              <p className="form-error" role="alert">{donationError}</p>
             )}
 
             <label>
@@ -619,20 +704,13 @@ function App() {
 
             <label>
               Correo electrónico
-              <input
-                required
-                type="email"
-                name="email"
-                placeholder="correo@ejemplo.com"
-              />
+              <input required type="email" name="email" placeholder="correo@ejemplo.com" />
             </label>
 
             <label>
               Tipo de prendas
               <select required name="type" defaultValue="">
-                <option value="" disabled>
-                  Selecciona una categoría
-                </option>
+                <option value="" disabled>Selecciona una categoría</option>
                 <option>Camisas y blusas</option>
                 <option>Pantalones</option>
                 <option>Vestidos</option>
@@ -644,37 +722,22 @@ function App() {
 
             <label>
               Cantidad aproximada
-              <input
-                required
-                type="number"
-                min="1"
-                name="quantity"
-                placeholder="Número de prendas"
-              />
+              <input required type="number" min="1" name="quantity" placeholder="Número de prendas" />
             </label>
 
             <label>
               Cuéntanos más
-              <textarea
-                name="details"
-                rows="3"
-                placeholder="Estado de las prendas u observaciones..."
-              />
+              <textarea name="details" rows="3" placeholder="Estado de las prendas u observaciones..." />
             </label>
 
-            <button
-              className="btn btn-dark form-submit"
-              type="submit"
-              disabled={donationLoading}
-            >
+            <button className="btn btn-dark form-submit" type="submit" disabled={donationLoading}>
               {donationLoading ? "Enviando..." : "Enviar intención"}
               <ArrowRight size={16} />
             </button>
 
             {donationSent && (
               <div className="form-success" role="status">
-                ¡Gracias! Tu intención de donación fue recibida correctamente
-                por el servidor de Fashion Style.
+                ¡Gracias! Tu intención de donación fue recibida correctamente por el servidor de Fashion Style.
               </div>
             )}
           </form>
@@ -685,26 +748,10 @@ function App() {
 
   function Sustainability() {
     const tips = [
-      [
-        "01",
-        "Cuida lo que tienes",
-        "Sigue las etiquetas de cuidado, lava solo cuando sea necesario y deja secar adecuadamente."
-      ],
-      [
-        "02",
-        "Repara y transforma",
-        "Un botón, un dobladillo o un pequeño arreglo pueden extender la vida de una prenda."
-      ],
-      [
-        "03",
-        "Intercambia y comparte",
-        "Organiza intercambios con familiares o amigos y encuentra nuevas prendas sin comprar."
-      ],
-      [
-        "04",
-        "Compra con intención",
-        "Antes de adquirir algo, piensa en su utilidad, calidad y cuánto tiempo lo usarás."
-      ]
+      ["01", "Cuida lo que tienes", "Sigue las etiquetas de cuidado, lava solo cuando sea necesario y deja secar adecuadamente."],
+      ["02", "Repara y transforma", "Un botón, un dobladillo o un pequeño arreglo pueden extender la vida de una prenda."],
+      ["03", "Intercambia y comparte", "Organiza intercambios con familiares o amigos y encuentra nuevas prendas sin comprar."],
+      ["04", "Compra con intención", "Antes de adquirir algo, piensa en su utilidad, calidad y cuánto tiempo lo usarás."]
     ];
 
     return (
@@ -748,10 +795,7 @@ function App() {
             <p>Puede ser el inicio de una nueva historia.</p>
           </div>
 
-          <button
-            className="btn btn-dark"
-            onClick={() => navigate("donaciones")}
-          >
+          <button className="btn btn-dark" onClick={() => navigate("donaciones")}>
             Conoce las donaciones <ArrowRight size={15} />
           </button>
         </div>
@@ -764,12 +808,7 @@ function App() {
       <section className="page-section campaigns-page">
         <PageHeading
           eyebrow="JUNTOS PODEMOS HACER MÁS"
-          title={
-            <>
-              Pequeñas acciones,<br />
-              <em>grandes historias.</em>
-            </>
-          }
+          title={<>Pequeñas acciones,<br /><em>grandes historias.</em></>}
           description="Fashion Style busca promover una relación más consciente con la ropa a través de iniciativas para compartir y reutilizar."
         />
 
@@ -782,20 +821,14 @@ function App() {
 
           <div className="campaign-info">
             <span className="eyebrow">INICIATIVA DESTACADA</span>
-            <h2>
-              Un armario.<br />
-              Muchas posibilidades.
-            </h2>
+            <h2>Un armario.<br />Muchas posibilidades.</h2>
             <p>
               Invitamos a nuestra comunidad a revisar sus prendas, separar
               aquellas que están en buen estado y descubrir nuevas maneras
               de compartirlas.
             </p>
 
-            <button
-              className="btn btn-dark"
-              onClick={() => navigate("donaciones")}
-            >
+            <button className="btn btn-dark" onClick={() => navigate("donaciones")}>
               Participar <ArrowRight size={16} />
             </button>
           </div>
@@ -835,9 +868,7 @@ function App() {
 
         <div className="chat-window">
           <div className="chat-header">
-            <div className="chat-avatar">
-              <Sparkles />
-            </div>
+            <div className="chat-avatar"><Sparkles /></div>
 
             <div>
               <strong>Fashion Assistant</strong>
@@ -849,17 +880,11 @@ function App() {
 
           <div className="chat-messages">
             {chatMessages.map((message, index) => (
-              <div
-                className={`chat-message ${message.role}`}
-                key={index}
-              >
+              <div className={`chat-message ${message.role}`} key={index}>
                 <div className="message-icon">
                   {message.role === "bot" ? <Leaf size={15} /> : null}
                 </div>
-
-                <div className="message-bubble">
-                  {message.text}
-                </div>
+                <div className="message-bubble">{message.text}</div>
               </div>
             ))}
           </div>
@@ -871,12 +896,7 @@ function App() {
               placeholder="Escribe tu pregunta..."
               aria-label="Escribe tu pregunta"
             />
-
-            <button
-              className="btn btn-dark"
-              type="submit"
-              aria-label="Enviar"
-            >
+            <button className="btn btn-dark" type="submit" aria-label="Enviar">
               <Send size={17} />
             </button>
           </form>
@@ -891,11 +911,9 @@ function App() {
           <button onClick={() => setChatInput("¿Cómo puedo donar ropa?")}>
             ¿Cómo dono ropa?
           </button>
-
           <button onClick={() => setChatInput("¿Cómo cuido mis prendas?")}>
             Cuidado de prendas
           </button>
-
           <button onClick={() => setChatInput("¿Qué es la moda circular?")}>
             Moda circular
           </button>
@@ -920,23 +938,15 @@ function App() {
             <p>
               Escríbenos y cuéntanos cómo te gustaría ser parte de Fashion Style.
             </p>
-
-            <div className="contact-detail">
-              <Mail size={17} /> Formulario de contacto
-            </div>
-
-            <div className="contact-detail">
-              <Leaf size={17} /> Moda con propósito
-            </div>
+            <div className="contact-detail"><Mail size={17} /> Formulario de contacto</div>
+            <div className="contact-detail"><Leaf size={17} /> Moda con propósito</div>
           </div>
 
           <form className="form-card" onSubmit={submitContact}>
             <h3>Envíanos un mensaje</h3>
 
             {contactError && (
-              <p className="form-error" role="alert">
-                {contactError}
-              </p>
+              <p className="form-error" role="alert">{contactError}</p>
             )}
 
             <label>
@@ -946,46 +956,27 @@ function App() {
 
             <label>
               Correo electrónico
-              <input
-                required
-                type="email"
-                name="email"
-                placeholder="correo@ejemplo.com"
-              />
+              <input required type="email" name="email" placeholder="correo@ejemplo.com" />
             </label>
 
             <label>
               Asunto
-              <input
-                required
-                name="subject"
-                placeholder="¿Sobre qué quieres escribirnos?"
-              />
+              <input required name="subject" placeholder="¿Sobre qué quieres escribirnos?" />
             </label>
 
             <label>
               Mensaje
-              <textarea
-                required
-                name="message"
-                rows="5"
-                placeholder="Escribe tu mensaje aquí..."
-              />
+              <textarea required name="message" rows="5" placeholder="Escribe tu mensaje aquí..." />
             </label>
 
-            <button
-              className="btn btn-dark form-submit"
-              type="submit"
-              disabled={contactLoading}
-            >
+            <button className="btn btn-dark form-submit" type="submit" disabled={contactLoading}>
               {contactLoading ? "Enviando..." : "Enviar mensaje"}
               <Send size={16} />
             </button>
 
             {contactSent && (
               <div className="form-success" role="status">
-                ¡Gracias por escribirnos! Tu mensaje fue recibido correctamente
-                por el servidor de Fashion Style.
+                ¡Gracias por escribirnos! Tu mensaje fue recibido correctamente por el servidor de Fashion Style.
               </div>
             )}
           </form>
@@ -1002,14 +993,8 @@ function App() {
       </div>
 
       <header className="site-header">
-        <button
-          className="brand"
-          onClick={() => navigate("inicio")}
-        >
-          <span className="brand-mark">
-            <Leaf size={22} />
-          </span>
-
+        <button className="brand" onClick={() => navigate("inicio")}>
+          <span className="brand-mark"><Leaf size={22} /></span>
           <span>
             <strong>fashion style</strong>
             <small>WEAR THE CHANGE</small>
@@ -1050,7 +1035,6 @@ function App() {
         {page === "campanas" && <Campaigns />}
         {page === "asistente" && <Assistant />}
         {page === "contacto" && <Contact />}
-
         {page === "admin" && (
           <AdminPanel onBack={() => navigate("inicio")} />
         )}
@@ -1061,26 +1045,18 @@ function App() {
           className="brand footer-brand"
           onClick={() => navigate("inicio")}
         >
-          <span className="brand-mark">
-            <Leaf size={21} />
-          </span>
-
+          <span className="brand-mark"><Leaf size={21} /></span>
           <span>
             <strong>fashion style</strong>
             <small>WEAR THE CHANGE</small>
           </span>
         </button>
 
-        <p>
-          Moda consciente para un futuro que nos incluya a todos.
-        </p>
+        <p>Moda consciente para un futuro que nos incluya a todos.</p>
 
         <div className="footer-nav">
           {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => navigate(item.id)}
-            >
+            <button key={item.id} onClick={() => navigate(item.id)}>
               {item.label}
             </button>
           ))}
